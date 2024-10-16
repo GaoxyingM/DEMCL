@@ -14,7 +14,7 @@ from sklearn.manifold import TSNE
 import torch
 import torch.optim as optim
 from utility import Datasets
-from models.DSCBR import DSCBR
+from models.DEMCL import DEMCL
 from models.Diffusion import GaussianDiffusion, Denoise
 
 import pandas as pd
@@ -29,7 +29,8 @@ def get_cmd():
     # experimental settings
     parser.add_argument("-g", "--gpu", default="0", type=str, help="which gpu to use")
     parser.add_argument("-d", "--dataset", default="Youshu", type=str, help="which dataset to use, options: NetEase, Youshu, iFashion")
-    parser.add_argument("-m", "--model", default="DSCBR", type=str, help="which model to use, options: DSCBR")
+    
+    parser.add_argument("-m", "--model", default="DEMCL", type=str, help="which model to use, options: DEMCL")
     parser.add_argument("-i", "--info", default="", type=str, help="any auxilary info that will be appended to the log file name")
 
     # --begin add diffusion
@@ -65,7 +66,7 @@ def main():
     paras = get_cmd().__dict__
     dataset_name = paras["dataset"]
 
-    assert paras["model"] in ["DSCBR"], "Pls select models from: DSCBR"
+    assert paras["model"] in ["DEMCL"], "Pls select models from: DEMCL"
 
     if "_" in dataset_name:
         conf = conf[dataset_name.split("_")[0]]
@@ -164,8 +165,8 @@ def main():
 
 
         # model
-        if conf['model'] == 'DSCBR':
-            model = DSCBR(conf, dataset.graphs).to(device)
+        if conf['model'] == 'DEMCL':
+            model = DEMCL(conf, dataset.graphs).to(device)
         else:
             raise ValueError("Unimplemented model %s" %(conf["model"]))
 
